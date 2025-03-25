@@ -10,12 +10,15 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserCredentialService {
+public class UserCredentialService implements UserDetailsService{
 
     private final UserCredentialRepository userCredentialRepository;
     private final PasswordEncoder passwordEncoder;
@@ -28,17 +31,21 @@ public class UserCredentialService {
             return new ResponseEntity<>(new RegisterResponse("Email already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        UserCredential usercCredential = UserCredential.builder()
+        UserCredential userCredential = UserCredential.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(List.of("USER"))
                 .build();
 
-        userCredentialRepository.save(usercCredential);
+        userCredentialRepository.save(userCredential);
         return new ResponseEntity<>(new RegisterResponse("User registered successfully"), HttpStatus.CREATED);
     }
 
-    
+    @Override
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        return userCredentialRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
+    }
 
 }
