@@ -1,0 +1,3 @@
+[submodule "shared-events"]
+	path = shared-events
+	url = https://github.com/Ycrafts/shared-events.git
