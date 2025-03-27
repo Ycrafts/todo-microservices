@@ -10,7 +10,7 @@ import com.profileService.dtos.UserProfileUpdateRequest;
 import com.profileService.models.UserProfile;
 import com.profileService.repositories.UserProfileRepository;
 
-import com.todomicroservices.events.UserRegisteredEvent;
+// import com.todomicroservices.events.UserRegisteredEvent;
 
 import java.util.List;
 import java.util.Optional;
