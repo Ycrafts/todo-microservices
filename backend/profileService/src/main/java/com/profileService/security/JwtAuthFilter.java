@@ -19,7 +19,6 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    // private final UserDetailsService userDetailsService; // You might need this later
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -27,7 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userId; // Changed from userEmail to userId for clarity
+        final String userId; 
 
         if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -35,18 +34,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        userId = jwtService.extractUsername(jwt); // This method in JwtService extracts the userId (subject)
-
+        userId = jwtService.extractUsername(jwt); 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // User is not yet authenticated
-            // You might load user details from your UserProfile entity based on userId here if needed
-            // UserDetails userDetails = ...
-
+         
             if (jwtService.isTokenValid(jwt)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userId, // Use the userId as the principal
+                        userId, //userId as the principal
                         null,
-                        null // If you loaded UserDetails, you could use userDetails.getAuthorities()
+                        null 
                 );
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

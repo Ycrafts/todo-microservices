@@ -1,6 +1,5 @@
 package com.authService.security;
 
-import com.authService.services.UserCredentialService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,14 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.authService.services.UserCredentialService;
+
 @Configuration
 public class SecurityConfig {
 
-    // Removed the field injection of UserCredentialService
-
-    // SecurityConfig(UserCredentialService userCredentialService) {
-    //     this.userCredentialService = userCredentialService;
-    // }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,8 +22,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/register").permitAll()
-                        .requestMatchers("/api/v1/test").permitAll()
                         .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/test").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable())
@@ -43,7 +39,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserCredentialService userCredentialService) { // Inject as a parameter
+    public DaoAuthenticationProvider authenticationProvider(UserCredentialService userCredentialService) { 
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userCredentialService);
         authProvider.setPasswordEncoder(passwordEncoder());

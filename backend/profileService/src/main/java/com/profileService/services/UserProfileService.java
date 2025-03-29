@@ -10,7 +10,6 @@ import com.profileService.dtos.UserProfileUpdateRequest;
 import com.profileService.models.UserProfile;
 import com.profileService.repositories.UserProfileRepository;
 
-// import com.todomicroservices.events.UserRegisteredEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,7 @@ public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
 
-    public UserProfileResponse convertToUserProfileResponse(UserProfile userProfile) { // Changed to public
+    public UserProfileResponse convertToUserProfileResponse(UserProfile userProfile) { 
         UserProfileResponse response = new UserProfileResponse();
         response.setUsername(userProfile.getUsername());
         response.setEmail(userProfile.getEmail());
@@ -33,7 +32,8 @@ public class UserProfileService {
         return userProfileRepository.findByUserId(authUserId);
     }
 
-    public List<UserProfileResponse> getAllUserProfiles() { // Potentially for admin use
+
+    public List<UserProfileResponse> getAllUserProfiles() { 
         List<UserProfile> userProfiles = userProfileRepository.findAll();
         return userProfiles.stream()
                 .map(this::convertToUserProfileResponse)

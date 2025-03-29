@@ -1,21 +1,21 @@
 package com.authService.util;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtUtil {
@@ -29,7 +29,7 @@ public class JwtUtil {
     @Value("${jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public String extractUsername(String token) {
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -52,7 +52,7 @@ public class JwtUtil {
     }
 
     public Key getSignInKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(secretKey); // Use secretKey instead of secretKeyBase64
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey); 
         return Keys.hmacShaKeyFor(keyBytes);
     }
     
@@ -75,7 +75,7 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractUserId(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 

@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.profileService.dtos.UserProfileCreationRequest;
@@ -26,8 +24,8 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @GetMapping("/{userId}") // For internal service communication (e.g., Task Management)
-    @PreAuthorize("isAuthenticated()") // You might need a different authorization strategy here
+    @GetMapping("/{userId}") 
+    @PreAuthorize("isAuthenticated()") 
     public ResponseEntity<UserProfileResponse> getUserProfileByUserId(@PathVariable String userId) {
         Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileByAuthId(userId);
         return userProfileOptional.map(userProfile ->
@@ -35,8 +33,8 @@ public class UserProfileController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/") // Potentially for admin use to list all profiles
-    @PreAuthorize("isAuthenticated() and hasRole('ADMIN')") // Adjust role as needed
+    @GetMapping("/") 
+    @PreAuthorize("isAuthenticated() or hasRole('ADMIN')") 
     public ResponseEntity<List<UserProfileResponse>> getAllUserProfiles() {
         List<UserProfileResponse> userProfiles = userProfileService.getAllUserProfiles();
         return new ResponseEntity<>(userProfiles, HttpStatus.OK);
@@ -47,10 +45,11 @@ public class UserProfileController {
     public ResponseEntity<UserProfileResponse> getMyProfile(Principal principal) {
         Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileByAuthId(principal.getName());
         return userProfileOptional.map(userProfile ->
-                        new ResponseEntity<>(userProfileService.convertToUserProfileResponse(userProfile), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                                new ResponseEntity<>(userProfileService.convertToUserProfileResponse(userProfile), HttpStatus.OK))
+                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    
     @PutMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateMyProfile(Principal principal, @Valid @RequestBody UserProfileUpdateRequest updateRequest) {
@@ -59,7 +58,7 @@ public class UserProfileController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Temporary endpoint for initial user profile creation by Auth Service
+    
     @PostMapping
     public ResponseEntity<UserProfile> createUserProfile(@RequestBody UserProfileCreationRequest creationRequest) {
         UserProfile createdUser = userProfileService.createUserProfile(

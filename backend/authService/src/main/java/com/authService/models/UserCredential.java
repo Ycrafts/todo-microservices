@@ -19,14 +19,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
-
 
 @Data
 @AllArgsConstructor
@@ -69,9 +67,13 @@ public class UserCredential implements UserDetails {
         return this.password;
     }
 
+    public String getActualUsername(){
+        return this.username; // returns the actual username instead of the id like the one i overridden at the bottom
+    }
+
     @Override
     public String getUsername() {
-        return this.username;
+        return this.id.toString();// crucial since i am gonna use the id to generate the token
     }
 
     @Override
