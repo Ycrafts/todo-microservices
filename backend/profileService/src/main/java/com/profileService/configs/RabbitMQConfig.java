@@ -33,7 +33,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue userRegisteredQueue() {
-        return new Queue(userRegisteredQueue, true); // durable: true to survive broker restarts
+        return new Queue(userRegisteredQueue, true);
     }
 
     @Bean

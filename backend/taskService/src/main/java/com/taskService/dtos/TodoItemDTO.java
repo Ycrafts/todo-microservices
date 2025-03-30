@@ -27,6 +27,6 @@ public class TodoItemDTO {
     private LocalDate dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long todoListId; // To associate with a TodoList
-    private String createdByUserId; // Changed from UserResponse to String for user ID
+    private Long todoListId; 
+    private String createdByUserId; 
 }

@@ -10,5 +10,5 @@ import com.taskService.models.TodoList;
 
 @Repository
 public interface TodoListRepository extends JpaRepository<TodoList, Long>{
-    List<TodoList> findByCreatedBy(String createdBy); // Changed parameter type to String
+    List<TodoList> findByCreatedBy(String createdBy); // String param
 }

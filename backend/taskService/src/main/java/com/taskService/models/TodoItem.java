@@ -54,7 +54,7 @@ public class TodoItem {
     @JoinColumn(name = "todo_list_id", nullable = false)
     private TodoList todoList;
 
-    @Column(name = "user_id", nullable = false) // Changed to String and added Column annotation
+    @Column(name = "user_id", nullable = false) 
     private String createdBy;
 
     public enum TodoStatus {

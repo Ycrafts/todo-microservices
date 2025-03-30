@@ -18,5 +18,5 @@ public class TodoListDTO {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String createdByUserId; // Changed from UserResponse to String for user ID
+    private String createdByUserId;
 }

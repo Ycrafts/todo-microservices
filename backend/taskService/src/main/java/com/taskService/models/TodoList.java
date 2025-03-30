@@ -44,7 +44,7 @@ public class TodoList {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "user_id", nullable = false) // Changed to String and added Column annotation
+    @Column(name = "user_id", nullable = false) 
     private String createdBy;
 
     @OneToMany(mappedBy = "todoList", cascade = CascadeType.REMOVE, orphanRemoval = true)
