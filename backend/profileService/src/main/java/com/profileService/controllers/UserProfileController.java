@@ -34,7 +34,7 @@ public class UserProfileController {
     }
 
     @GetMapping("/") 
-    @PreAuthorize("isAuthenticated() or hasRole('ADMIN')") 
+    @PreAuthorize("isAuthenticated() and hasRole('ADMIN')") 
     public ResponseEntity<List<UserProfileResponse>> getAllUserProfiles() {
         List<UserProfileResponse> userProfiles = userProfileService.getAllUserProfiles();
         return new ResponseEntity<>(userProfiles, HttpStatus.OK);

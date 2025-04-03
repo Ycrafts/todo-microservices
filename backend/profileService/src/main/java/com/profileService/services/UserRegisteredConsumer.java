@@ -14,8 +14,8 @@ public class UserRegisteredConsumer {
 
     @RabbitListener(queues = "${rabbitmq.queue.user-registered}") 
     public void handleUserRegisteredEvent(UserRegisteredEvent event) {
-        System.out.println("uuid from the event "+ event.getUserId());
-        System.out.println("the username from the even before creating the object:"+ event.getUsername());
+        // System.out.println("uuid from the event "+ event.getUserId());
+        // System.out.println("the username from the event before creating the object:"+ event.getUsername());
         userProfileService.createUserProfile(event.getUserId(), event.getUsername(), event.getEmail());
     }
 }

@@ -46,7 +46,6 @@ public class RabbitMQConfig {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
 
-        // Explicitly set the allowed packages
         typeMapper.setIdClassMapping(Map.of(
                 "UserRegisteredEvent", com.authService.events.UserRegisteredEvent.class
         ));

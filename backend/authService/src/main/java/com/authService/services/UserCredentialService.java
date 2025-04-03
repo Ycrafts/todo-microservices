@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserCredentialService implements UserDetailsService{
 
-    private static final Logger logger = LoggerFactory.getLogger(UserCredentialService.class);
+    // private static final Logger logger = LoggerFactory.getLogger(UserCredentialService.class);
 
     private final UserCredentialRepository userCredentialRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,20 +36,20 @@ public class UserCredentialService implements UserDetailsService{
 
     @Transactional
     public ResponseEntity<RegisterResponse> registerUser(RegisterRequest request) {
-        logger.info("Attempting to register user with username: {}", request.getUsername()); 
+        // logger.info("Attempting to register user with username: {}", request.getUsername()); 
         if (userCredentialRepository.findByUsername(request.getUsername()).isPresent()) {
-            logger.warn("Username already exists: {}", request.getUsername());
+            // logger.warn("Username already exists: {}", request.getUsername());
             return new ResponseEntity<>(new RegisterResponse("Username already exists"), HttpStatus.BAD_REQUEST);
         }
         if (userCredentialRepository.findByEmail(request.getEmail()).isPresent()) {
-            logger.warn("Email already exists: {}", request.getEmail());
+            // logger.warn("Email already exists: {}", request.getEmail());
             return new ResponseEntity<>(new RegisterResponse("Email already exists"), HttpStatus.BAD_REQUEST);
         }
 
     
         String userId = UUID.randomUUID().toString();
 
-        System.out.println("the uuid before saving to db"+userId);
+        // System.out.println("the uuid before saving to db"+userId);
 
         UserCredential userCredential = UserCredential.builder()
                 .username(request.getUsername())
@@ -59,7 +59,7 @@ public class UserCredentialService implements UserDetailsService{
                 .build();
 
         UserCredential savedUser = userCredentialRepository.save(userCredential);
-        logger.info("User saved successfully with ID: {}", savedUser.getId()); 
+        // logger.info("User saved successfully with ID: {}", savedUser.getId()); 
 
         userId = savedUser.getId().toString(); 
 
@@ -68,16 +68,16 @@ public class UserCredentialService implements UserDetailsService{
                 userId,
                 savedUser.getActualUsername(),
                 savedUser.getEmail(),
-                Instant.now() // current timestamp
+                Instant.now() 
         );
-        logger.info("Created UserRegisteredEvent: {}", userRegisteredEvent); 
+        // logger.info("Created UserRegisteredEvent: {}", userRegisteredEvent); 
         
         rabbitTemplate.convertAndSend(
                 "user.registered.exchange",
                 "user.registered",
                 userRegisteredEvent
         );
-        logger.info("Published UserRegisteredEvent to exchange: {}, routing key: {}", "user.registered.exchange", "user.registered"); // log  event publication
+        // logger.info("Published UserRegisteredEvent to exchange: {}, routing key: {}", "user.registered.exchange", "user.registered"); // log  event publication
 
         return new ResponseEntity<>(new RegisterResponse("User registered successfully"), HttpStatus.CREATED);
     }
@@ -87,5 +87,4 @@ public class UserCredentialService implements UserDetailsService{
         return userCredentialRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
     }
-
 }

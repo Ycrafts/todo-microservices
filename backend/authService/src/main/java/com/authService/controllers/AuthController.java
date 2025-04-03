@@ -61,5 +61,4 @@ public class AuthController {
     public String test() {
         return "UserProfile service is running";
     }
-
 }
